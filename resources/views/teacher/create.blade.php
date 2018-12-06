@@ -91,7 +91,7 @@
 			</select>
 		</div> -->
 		<div class="uk-width-1-2@s">
-			<select class="uk-select" name="headquarters_id" id="form-stacked-select">
+			<select class="uk-select" name="headquarter_id" id="form-stacked-select">
 				<option value="{{ old('headquarters_id') }}" >Sede</option>
 				@forelse($sedes as $sede)
 				<option value="{{$sede->id}}">{{$sede->headquarter}}</option>

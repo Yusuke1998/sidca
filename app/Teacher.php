@@ -44,7 +44,7 @@ class Teacher extends Model
 
     public function headquarter()
     {
-        return $this->belongsTo(Headquarter::class, 'headquarter_id');
+        return $this->belongsTo(Headquarter::class);
     }
 
     public function state()

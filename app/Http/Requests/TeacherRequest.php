@@ -33,7 +33,7 @@ class TeacherRequest extends FormRequest
             'email2'            => ['max:50'],
             'address'           => ['required','min:10','max:190'],
             'countrie_id'       => ['required'],
-            'headquarters_id'   => ['required'],
+            'headquarter_id'   => ['required'],
             'classification_id' => ['required'],
             'status'            => ['required'],
             'birthdate'         => ['required'],

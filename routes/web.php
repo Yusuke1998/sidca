@@ -8,6 +8,6 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::resource('profesores','teachers');
+Route::resource('profesores','TeacherController');
 
-Route::get('/profesores/edit/{teacher}', 'teachers@edit');
+Route::get('/profesores/edit/{teacher}', 'TeacherController@edit');
