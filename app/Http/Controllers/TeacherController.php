@@ -98,28 +98,20 @@ class TeacherController extends Controller
 		return view('teacher.show');
 	}
 
-	public function edit(Teacher $teacher)
+	public function edit($id)
 	{
         // dd($teacher->id);
-		$sedes = Headquarter::all();
-		$paises = Country::all();
-		$clasificaciones = Classification::all();
-		$estados = State::all();
-		$count_phones = Teacher::find($teacher->id)->phones->count();
-		$count_emails = Teacher::find($teacher->id)->emails->count();
+        $teacher = Teacher::where('identity',$id)->first();
+		$count_phones = $teacher->phones->count();
+		$count_emails = $teacher->emails->count();
         // contadores
 		$i = 1;
         // dd($count_emails);
-
-		return view('teacher.edit')
-		->with('count_phones',$count_phones)
-		->with('count_emails',$count_emails)
-		->with('sedes',$sedes)
-		->with('clasificaciones',$clasificaciones)
-		->with('paises',$paises)
-		->with('estados',$estados)
-		->with('i',$i)
-		->with('teacher', $teacher);
+		return \Response::json([
+			'count_phones'=>$count_phones,
+			'count_emails'=>$count_emails,
+			'teacher'=>$teacher
+		]);
 	}
 
 	public function update(UpdateRequest $request,$id)
@@ -163,7 +155,7 @@ class TeacherController extends Controller
 
         // UPDATE EMAIL
 		DB::table('email')
-		->join('teachers', 'email.teacher_id', '=', 'teacher.id')
+		->join('teachers', 'email.teacher_id', '=', 'teachers.id')
 		->update(array('email'=>$request->email1));
 		// if ($correo->count() == 2) {
 		// 	for ($i=1; $i < 3; $i++) { 
@@ -185,8 +177,31 @@ class TeacherController extends Controller
 		return back()->with('info','Se ha modificado de manera exitosa!');
 	}
 
+	public function modal(Teacher $teacher)
+	{
+		$i = 0;
+		$sedes = Headquarter::all();
+		$paises = Country::all();
+		$clasificaciones = Classification::all();
+		$estados = State::all();
+		$count_phones = $teacher->phones->count();
+		$count_emails = $teacher->emails->count();
+		return view('layouts.modify')
+		->with('count_phones',$count_phones)
+		->with('count_emails',$count_emails)
+		->with('sedes',$sedes)
+		->with('clasificaciones',$clasificaciones)
+		->with('paises',$paises)
+		->with('estados',$estados)
+		->with('i', $i)
+		->with('teacher', $teacher);
+
+	}
+
 	public function destroy($id)
 	{
-        //
-	}
+   		$teacher = Teacher::find($id);
+   		$teacher->delete();
+		return back()->with('info','Se ha eliminado el registro de manera exitosa!');
+   	}
 }

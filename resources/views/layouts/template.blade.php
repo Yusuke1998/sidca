@@ -59,7 +59,7 @@
 					<li class="uk-parent">
 						<a href="#" >PROFESOR</a>
 						<ul class="uk-nav-sub">
-							<li><a href="create">Registrar Profesor</a></li>
+							<li><a href="/profesores/create">Registrar Profesor</a></li>
 							<li><a href="/profesores">Listado de Profesores</a></li>
 						</ul>
 					</li>
@@ -102,6 +102,7 @@
 
 	</div>
 	<!-- JS FILES -->
+	
 	<script src="{{asset('js/jquery-3.3.1.min.js')}}"></script>
 	<script src="{{asset('js/myjs.js')}}"></script>
 	<script src="{{asset('js/uikit.min.js')}}"></script>

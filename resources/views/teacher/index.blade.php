@@ -1,7 +1,7 @@
 @extends('layouts.template')
 @section('content')
 <!-- REPORT -->
-
+@include('layouts.alert')
 <div class=" uk-width-1-2@s uk-padding-small uk-background-secondary uk-width-medium uk-overflow-auto">
 	<!-- TABLA DE DATOS -->
 
@@ -40,8 +40,13 @@
 				<td>{{ $teacher->status }}</td>
 
 				<td>
-					<a href="{{-- /profesores/edit/{{$teacher->id}} --}} #modal-sections" uk-toggle uk-icon="file-edit"></a> 
-					<a href="" uk-icon="info"></a>
+					<a href="#" uk-icon="file-edit" class="edit"></a> ><!-- {{ route('profesores.edit', $teacher->id) }}-->
+					<a href="{{ route('profesores.show', $teacher->id) }}" uk-icon="info"></a>
+					<form name="destroy{{$teacher->id}}" action="{{ route('profesores.destroy', $teacher->id) }}" method="post">
+						{{csrf_field()}}
+						{{method_field('DELETE')}}
+						<span class="uk-icon" uk-icon="trash" onclick="destroy{{$teacher->id}}.submit()"></span>
+					</form>
 				</td>
 
 			</tr>
@@ -54,7 +59,6 @@
 
 	</table>
 </div>
-@include('layouts.modify')
 
 <!-- /REPORT -->
 @endsection
