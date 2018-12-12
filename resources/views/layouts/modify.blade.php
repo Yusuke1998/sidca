@@ -121,7 +121,7 @@
 
 					<div class="uk-width-1-1@s">
 						<div class="uk-margin">
-							<textarea class="uk-textarea" name="observation" value="" rows="2" placeholder="Observaciones">{{ $teacher->observation }}</textarea>
+							<textarea class="uk-textarea" name="observation" id="observaciones" value="" rows="2" placeholder="Observaciones">{{ $teacher->observation }}</textarea>
 						</div>
 					</div>
 				</div>				

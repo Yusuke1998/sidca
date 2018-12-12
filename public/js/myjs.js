@@ -46,6 +46,7 @@ $(() => {
 			$('#headquarter_option').val(success.teacher.headquarter_id)
 			$('#classification_option').val(success.teacher.classification_id)
 			$('#status_option').val(success.teacher.status)
+			$('#observaciones').text(success.teacher.observation)
 		})
 
 		.fail((error) => {
