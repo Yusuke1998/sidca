@@ -10,7 +10,7 @@ class users extends Controller
 {
     public function index()
     {
-        $usuarios = User::all();
+        $usuarios = User::paginate(10);
         return view('user.index')
             ->with('usuarios',$usuarios);
     }

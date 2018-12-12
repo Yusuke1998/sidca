@@ -23,7 +23,7 @@ class TeacherController extends Controller
 	public function index()
 	{
 
-		$teachers = Teacher::all();
+		$teachers = Teacher::paginate(20);
         // dd($teachers);
 		$sedes = Headquarter::all();
 		$paises = Country::all();
@@ -31,6 +31,8 @@ class TeacherController extends Controller
 		$estados = State::all();
         // contadores
 		$i = 1;
+		$p = 1;
+		$e = 1;
 
 		return view('teacher/index')
 		->with('teachers', $teachers)    
@@ -38,7 +40,9 @@ class TeacherController extends Controller
 		->with('clasificaciones',$clasificaciones)
 		->with('paises',$paises)
 		->with('estados',$estados)
-		->with('i',$i);
+		->with('i',$i)
+		->with('e',$e)
+		->with('p',$p);
 	}
 
 	public function create()
@@ -57,19 +61,19 @@ class TeacherController extends Controller
 
 	public function store(TeacherRequest $request)
 	{
-		$profesor = Teacher::create($request->all()
-            // 'first_name'    =>  $request->first_name,
-            // 'last_name'     =>  $request->last_name,
-            // 'identity'      =>  $request->identity,
-            // 'birthdate'     =>  $request->birthdate,
-            // 'address'       =>  $request->address,
-            // 'countrie_id'   =>  $request->countrie_id,
-            // 'classification_id'    =>  $request->classification_id,
-            // 'headquarter_id'      =>  $request->headquarters_id,
-            // 'status'        =>  $request->status,
-            // 'observation'   =>  $request->observation,
-            // 'state_id'      =>  $request->state_id,
-	);
+		$profesor = Teacher::create([
+            'first_name'    =>  $request->first_name,
+            'last_name'     =>  $request->last_name,
+            'identity'      =>  $request->identity,
+            'birthdate'     =>  $request->birthdate,
+            'address'       =>  $request->address,
+            'countrie_id'   =>  $request->countrie_id,
+            'classification_id'    =>  $request->classification_id,
+            'headquarter_id'      =>  $request->headquarter_id,
+            'status'        =>  $request->status,
+            'observation'   =>  ($request->observation)?$request->observation:'NULL',
+            'state_id'      =>  $request->state_id,
+	]);
 
 		for ($i=1; $i < 3; $i++) { 
 			if (!empty($request->input('phone'.$i))) {
@@ -93,9 +97,11 @@ class TeacherController extends Controller
 		return back()->with('info','Se ha registrado de manera exitosa!');
 	}
 
-	public function show()
+	public function show($id)
 	{
-		return view('teacher.show');
+		$teacher = Teacher::find($id);
+		return view('teacher.show')
+		->with('teacher', $teacher);
 	}
 
 	public function edit($id)
@@ -123,12 +129,11 @@ class TeacherController extends Controller
 		$teacher->update([
 			'first_name'    =>  ($request->first_name)?$request->first_name:$teacher->first_name,
 			'last_name'     =>  ($request->last_name)?$request->last_name:$teacher->last_name,
-			'identity'      =>  ($request->identity)?$request->identity:$teacher->identity,
 			'birthdate'     =>  ($request->birthdate)?$request->birthdate:$teacher->birthdate,
 			'address'       =>  ($request->address)?$request->address:$teacher->address,
 			'countrie_id'   =>  ($request->countrie_id)?$request->countrie_id:$teacher->countrie_id,
 			'classification_id'    =>  ($request->classification_id)?$request->classification_id:$teacher->classification_id,
-			'headquarters_id'      =>  ($request->headquarters_id)?$request->headquarters_id:$teacher->headquarters_id,
+			'headquarter_id'      =>  ($request->headquarters_id)?$request->headquarters_id:$teacher->headquarters_id,
 			'status'        =>  ($request->status)?$request->status:$teacher->status,
 			'observation'   =>  ($request->observation)?$request->observation:$teacher->observation,
 			'state_id'      =>  ($request->state_id)?$request->state_id:$teacher->state_id,
@@ -136,66 +141,7 @@ class TeacherController extends Controller
             // 'parish_id'     =>  ($request->parish_id)?$request->parish_id:$teacher->parish_id,
 		]);
 
-        // UPDATE PHONE
-
-		// if ($telefono->count() == 2) {
-		// 	$telefono->update([
-		// 		'number' => ($i == 1)?$request->phone1:$request->phone2,
-		// 	]);
-		// }elseif($telefono->first()->number != $request->phone1){
-		// 	$telefono->update([
-		// 		'number' => $request->phone1,
-		// 	]);
-		// 	if ($telefono->first()->number != $request->phone2) {
-		// 		$telefono->update([
-		// 			'number' => $request->phone2,
-		// 		]);
-		// 	}
-		// }
-
-        // UPDATE EMAIL
-		DB::table('email')
-		->join('teachers', 'email.teacher_id', '=', 'teachers.id')
-		->update(array('email'=>$request->email1));
-		// if ($correo->count() == 2) {
-		// 	for ($i=1; $i < 3; $i++) { 
-		// 		$correo->update([
-		// 			'email' => ($i == 1)?$request->email1:$request->email2,
-		// 		]);
-		// 	}
-		// }elseif($correo->first()->email != $request->email1){
-		// 	$correo->update([
-		// 		'email' => $request->email1,
-		// 	]);
-		// 	if ($correo->first()->email!= $request->email2) {
-		// 		$correo->update([
-		// 			'email' => $request->email2,
-		// 		]);
-		// 	}
-		// }
-
 		return back()->with('info','Se ha modificado de manera exitosa!');
-	}
-
-	public function modal(Teacher $teacher)
-	{
-		$i = 0;
-		$sedes = Headquarter::all();
-		$paises = Country::all();
-		$clasificaciones = Classification::all();
-		$estados = State::all();
-		$count_phones = $teacher->phones->count();
-		$count_emails = $teacher->emails->count();
-		return view('layouts.modify')
-		->with('count_phones',$count_phones)
-		->with('count_emails',$count_emails)
-		->with('sedes',$sedes)
-		->with('clasificaciones',$clasificaciones)
-		->with('paises',$paises)
-		->with('estados',$estados)
-		->with('i', $i)
-		->with('teacher', $teacher);
-
 	}
 
 	public function destroy($id)

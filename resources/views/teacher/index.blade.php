@@ -40,13 +40,9 @@
 				<td>{{ $teacher->status }}</td>
 
 				<td>
-					<a href="#" uk-icon="file-edit" class="edit"></a> ><!-- {{ route('profesores.edit', $teacher->id) }}-->
+					<a href="#" uk-icon="file-edit" class="edit" uk-toggle="#modal-sections"></a><!-- {{ route('profesores.edit', $teacher->id) }}-->
+					<a href="#" uk-icon="trash" uk-toggle="#modal-delete" class="delete"></a>
 					<a href="{{ route('profesores.show', $teacher->id) }}" uk-icon="info"></a>
-					<form name="destroy{{$teacher->id}}" action="{{ route('profesores.destroy', $teacher->id) }}" method="post">
-						{{csrf_field()}}
-						{{method_field('DELETE')}}
-						<span class="uk-icon" uk-icon="trash" onclick="destroy{{$teacher->id}}.submit()"></span>
-					</form>
 				</td>
 
 			</tr>
@@ -59,6 +55,8 @@
 
 	</table>
 </div>
-
+@if(isset($teacher))
+@include('layouts.modify')
+@endif
 <!-- /REPORT -->
 @endsection

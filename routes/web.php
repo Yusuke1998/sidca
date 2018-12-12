@@ -10,4 +10,4 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('profesores','TeacherController');
 
-Route::get('/profesores/modal/{teacher}', 'TeacherController@modal');
+Route::resource('users','users');
